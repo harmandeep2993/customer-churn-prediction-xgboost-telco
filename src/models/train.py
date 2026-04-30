@@ -10,6 +10,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_auc_score, f1_score, precision_score, recall_score
 
 from src.utils import config, get_logger
+from src.models import evaluate_and_log
 
 logger = get_logger(__name__)
 
@@ -77,6 +78,9 @@ def train_and_log(df: pd.DataFrame) -> None:
             # evaluate
             metrics = compute_metrics(model, X_test, y_test)
             mlflow.log_metrics(metrics)
+
+            # Evaluate Model
+            evaluate_and_log(model, X_test, y_test, model_name)
 
             # log model
             mlflow.sklearn.log_model(model, artifact_path="model")
