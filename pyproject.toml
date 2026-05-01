@@ -12,6 +12,7 @@ dependencies = [
     "mlflow>=3.11.1",
     "numpy>=2.4.3",
     "pandas>=2.3.3",
+    "pytest>=9.0.3",
     "pyyaml>=6.0.3",
     "scikit-learn>=1.8.0",
     "seaborn>=0.13.2",
