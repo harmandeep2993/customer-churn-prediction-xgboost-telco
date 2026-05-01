@@ -1,17 +1,21 @@
-# ===== 1. Base image =====
+# Dockerfile
+
 FROM python:3.12-slim
 
-# ===== 2. Working directory =====
 WORKDIR /app
 
-# ===== 3. Copy project =====
-COPY . .
-
-# ===== 4. Install dependencies =====
+# Install dependencies
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# ===== 5. Expose port =====
+# Copy project files
+COPY src/ ./src/
+COPY api/ ./api/
+COPY models/ ./models/
+COPY config.yaml .
+
+# Expose port
 EXPOSE 8000
 
-# ===== 6. Start FastAPI app =====
-CMD ["uvicorn", "app.api:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run API
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
