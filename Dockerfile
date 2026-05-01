@@ -1,17 +1,27 @@
-# ===== 1. Base image =====
+# Dockerfile
+
 FROM python:3.12-slim
 
-# ===== 2. Working directory =====
 WORKDIR /app
 
-# ===== 3. Copy project =====
-COPY . .
+# Install uv
+RUN pip install uv
 
-# ===== 4. Install dependencies =====
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy dependency files
+COPY pyproject.toml .
+COPY uv.lock .
 
-# ===== 5. Expose port =====
+# Install dependencies
+RUN uv sync --frozen
+
+# Copy project files
+COPY src/ ./src/
+COPY api/ ./api/
+COPY models/ ./models/
+COPY config.yaml .
+
+# Expose port
 EXPOSE 8000
 
-# ===== 6. Start FastAPI app =====
-CMD ["uvicorn", "app.api:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run API
+CMD ["uv", "run", "uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
